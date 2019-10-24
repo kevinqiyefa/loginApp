@@ -68,7 +68,7 @@ function SignIn({ setIsLogin }) {
             />
             {showError && (
               <div className="invalid-feedback">
-                * Please enter a message in the textarea.
+                * Incorrect username or password.
               </div>
             )}
           </div>
