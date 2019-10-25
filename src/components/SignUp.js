@@ -8,6 +8,7 @@ export default function SignUp({ history }) {
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [isAgree, setIsAgree] = useState(false);
+  const [showUserExistError, setShowUserExistError] = useState(false);
 
   const [validPassWord, setValidPassWord] = useState(false);
 
@@ -24,12 +25,13 @@ export default function SignUp({ history }) {
           password
         }
       };
-
-      const newData = { ...data, ...newUser };
-
-      localStorage.setItem('signupApp', JSON.stringify(newData));
-
-      setTimeout(() => history.push('/login'), 1000);
+      if (data[userName]) {
+        setShowUserExistError(true);
+      } else {
+        const newData = { ...data, ...newUser };
+        localStorage.setItem('signupApp', JSON.stringify(newData));
+        setTimeout(() => history.push('/login'), 1000);
+      }
     } else {
       setValidPassWord(true);
       setTimeout(() => setValidPassWord(false), 3000);
@@ -38,12 +40,30 @@ export default function SignUp({ history }) {
 
   const notDisable =
     userName && email && password && confirmedPassword && isAgree;
-
+  console.log('sss');
   return (
     <SigninWrapper>
       <div className="h-100 bg-light container p-5">
         <form className="mt-4" onSubmit={handleSubmit}>
           <h2>Sign Up</h2>
+
+          {showUserExistError && (
+            <div
+              className="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              Sorry... username already taken
+              <button
+                type="button"
+                className="close"
+                data-dismiss="alert"
+                aria-label="Close"
+                onClick={() => setShowUserExistError(false)}
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          )}
           <div className="form-group mt-3">
             <input
               type="text"
